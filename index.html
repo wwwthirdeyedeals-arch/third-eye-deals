@@ -9,37 +9,36 @@
     body { background: #000000; color: #ffffff; font-family: Arial, sans-serif; display: flex; flex-direction: column; min-height: 100vh; }
     
     /* Header UI */
-    header { display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 12px 20px; border-radius: 0 0 12px 12px; }
-    .header-left { display: flex; align-items: center; gap: 12px; }
+    header { display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 8px 15px; border-radius: 0 0 12px 12px; }
+    .header-left { display: flex; align-items: center; gap: 10px; }
     .menu-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #000; }
-    .brand { display: flex; align-items: center; gap: 8px; color: #00c853; font-size: 20px; font-weight: bold; }
-    .brand img { height: 35px; border-radius: 6px; }
+    .brand-logo { height: 36px; border-radius: 6px; object-fit: contain; }
     .admin-btn { background: #000000; color: #ffffff; border: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; }
     
     /* Side Drawer Navigation */
     .drawer { position: fixed; top: 0; left: -280px; width: 270px; height: 100%; background: #0f172a; border-right: 1px solid #1e293b; transition: 0.3s ease; z-index: 1000; padding: 20px; overflow-y: auto; }
     .drawer.active { left: 0; }
     .drawer-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 12px; margin-bottom: 15px; }
-    .drawer-brand { display: flex; align-items: center; gap: 10px; color: #00c853; font-weight: bold; font-size: 18px; }
-    .drawer-brand img { height: 32px; border-radius: 6px; }
+    .drawer-brand { display: flex; align-items: center; }
+    .drawer-brand img { height: 38px; border-radius: 6px; }
     .close-btn { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
     
-    /* Language Selector in Drawer */
-    .lang-box { background: #1e293b; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-    .lang-box label { font-size: 14px; color: #94a3b8; font-weight: bold; }
-    .lang-box select { background: #0f172a; color: #00c853; border: 1px solid #334155; padding: 6px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    /* Global Google Translate Language Selector */
+    .lang-box { background: #1e293b; padding: 8px 10px; border-radius: 8px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
+    .lang-box label { font-size: 13px; color: #94a3b8; font-weight: bold; }
+    #google_translate_element select { width: 100%; background: #0f172a; color: #a855f7; border: 1px solid #334155; padding: 6px; border-radius: 6px; font-weight: bold; cursor: pointer; }
 
     .drawer ul { list-style: none; }
     .drawer ul li { margin: 12px 0; }
     .drawer ul li a { color: #ffffff; text-decoration: none; font-size: 15px; display: block; padding: 8px; border-radius: 6px; transition: 0.2s; }
-    .drawer ul li a:hover { background: #1e293b; color: #00c853; }
+    .drawer ul li a:hover { background: #1e293b; color: #a855f7; }
     .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 999; }
     .overlay.active { display: block; }
 
     /* Admin Panel */
     .admin-panel { background: #0f172a; border: 1px solid #1e293b; padding: 15px; border-radius: 12px; margin: 20px; display: none; }
     .admin-panel input { width: 100%; padding: 10px; margin: 6px 0; background: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 6px; }
-    .add-btn { background: #00c853; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 8px; }
+    .add-btn { background: #6b21a8; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 8px; }
 
     /* Content Area */
     .main-content { flex: 1; padding: 15px; }
@@ -47,15 +46,18 @@
     .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 12px; text-align: center; }
     .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; background: #fff; }
     .card h3 { font-size: 16px; margin: 10px 0 5px; color: #ffffff; }
-    .card .price { color: #00c853; font-size: 18px; font-weight: bold; margin-bottom: 10px; }
-    .buy-btn { background: #00c853; color: #ffffff; text-decoration: none; display: block; padding: 10px; border-radius: 8px; font-weight: bold; }
+    .card .price { color: #a855f7; font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+    .buy-btn { background: #6b21a8; color: #ffffff; text-decoration: none; display: block; padding: 10px; border-radius: 8px; font-weight: bold; }
 
-    /* Footer */
-    footer { background: #0f172a; border-top: 1px solid #1e293b; padding: 25px 15px; margin-top: 30px; text-align: center; color: #94a3b8; font-size: 14px; }
-    .footer-links { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin: 15px 0; }
-    .footer-links a { color: #ffffff; text-decoration: none; }
-    .footer-links a:hover { color: #00c853; }
-    .support-box { background: #1e293b; padding: 12px; border-radius: 8px; margin: 10px auto; max-width: 300px; color: #fff; }
+    /* Compact Footer */
+    footer { background: #0f172a; border-top: 1px solid #1e293b; padding: 12px 10px; margin-top: auto; text-align: center; color: #94a3b8; font-size: 13px; }
+    .footer-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+    .footer-links a { color: #ffffff; text-decoration: none; font-size: 13px; }
+    .footer-links a:hover { color: #a855f7; }
+    
+    /* Hide Google Translate top bar & branding overlay */
+    .goog-te-banner-frame { display: none !important; }
+    body { top: 0px !important; }
   </style>
 </head>
 <body>
@@ -66,39 +68,36 @@
 <div class="drawer" id="drawer">
   <div class="drawer-header">
     <div class="drawer-brand">
-      🛍️ THIRD EYE
+      <img src="logo.png" alt="Third Eye Logo">
     </div>
     <button class="close-btn" onclick="toggleMenu()">✕</button>
   </div>
 
-  <!-- Language Selection -->
+  <!-- All World Languages Selector -->
   <div class="lang-box">
-    <label for="langSelect">🌐 Language:</label>
-    <select id="langSelect" onchange="changeLanguage(this.value)">
-      <option value="hi">हिंदी (Hindi)</option>
-      <option value="en">English</option>
-    </select>
+    <label>🌐 Language / भाषा:</label>
+    <div id="google_translate_element"></div>
   </div>
 
   <ul>
-    <li><a href="#" id="menu-home">🏠 Home</a></li>
-    <li><a href="https://wa.me/919076382864" target="_blank" id="menu-support">📞 Customer Support</a></li>
-    <li><a href="https://wa.me/919076382864?text=Track%20My%20Order" target="_blank" id="menu-track">📦 Track Order</a></li>
-    <li><a href="#" id="menu-privacy">🛡️ Privacy Policy</a></li>
-    <li><a href="#" id="menu-terms">📄 Terms & Conditions</a></li>
+    <li><a href="#">🏠 Home</a></li>
+    <li><a href="mailto:www.thirdeyedeals@gmail.com?subject=Customer%20Support">📧 Customer Support</a></li>
+    <li><a href="mailto:www.thirdeyedeals@gmail.com?subject=Track%20My%20Order">📦 Track Order</a></li>
+    <li><a href="#">🛡️ Privacy Policy</a></li>
+    <li><a href="#">📄 Terms & Conditions</a></li>
   </ul>
 </div>
 
 <header>
   <div class="header-left">
     <button class="menu-btn" onclick="toggleMenu()">☰</button>
-    <div class="brand">🛍️ THIRD EYE</div>
+    <img src="logo.png" alt="Third Eye" class="brand-logo">
   </div>
   <button id="auth-btn" class="admin-btn" onclick="loginWithGoogle()">Admin Login</button>
 </header>
 
 <div id="admin-panel" class="admin-panel">
-  <h3 style="color:#00c853; margin-bottom:10px;">Add New Product (Admin Only)</h3>
+  <h3 style="color:#a855f7; margin-bottom:10px;">Add New Product (Admin Only)</h3>
   <input type="text" id="p-name" placeholder="Product Name">
   <input type="number" id="p-price" placeholder="Price (₹)">
   <input type="text" id="p-img" placeholder="Image URL (e.g., https://...)">
@@ -110,18 +109,24 @@
 </div>
 
 <footer>
-  <div class="support-box">
-    <strong>Need Assistance?</strong><br>
-    📧 www.thirdeyedeals@gmail.com<br>
-    💬 WhatsApp: +91 9076382864
-  </div>
   <div class="footer-links">
     <a href="#">Privacy Policy</a> | 
     <a href="#">Terms of Service</a> | 
-    <a href="https://wa.me/919076382864">Help & Support</a>
+    <a href="mailto:www.thirdeyedeals@gmail.com">Help & Support</a>
   </div>
   <p>© 2026 Third Eye Deals. All Rights Reserved.</p>
 </footer>
+
+<!-- Google Translate Script for All World Languages -->
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'en',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    }, 'google_translate_element');
+  }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -148,22 +153,6 @@
   window.toggleMenu = () => {
     document.getElementById("drawer").classList.toggle("active");
     document.getElementById("overlay").classList.toggle("active");
-  };
-
-  window.changeLanguage = (lang) => {
-    if(lang === 'hi') {
-      document.getElementById("menu-home").innerText = "🏠 होम (Home)";
-      document.getElementById("menu-support").innerText = "📞 कस्टमर सपोर्ट";
-      document.getElementById("menu-track").innerText = "📦 ऑर्डर ट्रैक करें";
-      document.getElementById("menu-privacy").innerText = "🛡️ प्राइवेसी पॉलिसी";
-      document.getElementById("menu-terms").innerText = "📄 नियम एवं शर्तें";
-    } else {
-      document.getElementById("menu-home").innerText = "🏠 Home";
-      document.getElementById("menu-support").innerText = "📞 Customer Support";
-      document.getElementById("menu-track").innerText = "📦 Track Order";
-      document.getElementById("menu-privacy").innerText = "🛡️ Privacy Policy";
-      document.getElementById("menu-terms").innerText = "📄 Terms & Conditions";
-    }
   };
 
   window.loginWithGoogle = () => {
@@ -212,7 +201,7 @@
           <img src="${p.img}" alt="${p.name}">
           <h3>${p.name}</h3>
           <div class="price">₹${p.price}</div>
-          <a class="buy-btn" href="https://wa.me/919076382864?text=I want to buy ${p.name}">Buy Now</a>
+          <a class="buy-btn" href="mailto:www.thirdeyedeals@gmail.com?subject=Order%20Query%20for%20${encodeURIComponent(p.name)}">Buy Now / Inquiry</a>
         </div>
       `;
     });
@@ -220,5 +209,5 @@
 </script>
 
 </body>
-  </html>
-  
+    </html>
+    
