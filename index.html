@@ -10,19 +10,28 @@
     
     /* Header UI */
     header { display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 12px 20px; border-radius: 0 0 12px 12px; }
-    .header-left { display: flex; align-items: center; gap: 15px; }
+    .header-left { display: flex; align-items: center; gap: 12px; }
     .menu-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #000; }
     .brand { display: flex; align-items: center; gap: 8px; color: #00c853; font-size: 20px; font-weight: bold; }
+    .brand img { height: 35px; border-radius: 6px; }
     .admin-btn { background: #000000; color: #ffffff; border: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; }
     
     /* Side Drawer Navigation */
-    .drawer { position: fixed; top: 0; left: -260px; width: 250px; height: 100%; background: #0f172a; border-right: 1px solid #1e293b; transition: 0.3s ease; z-index: 1000; padding: 20px; }
+    .drawer { position: fixed; top: 0; left: -280px; width: 270px; height: 100%; background: #0f172a; border-right: 1px solid #1e293b; transition: 0.3s ease; z-index: 1000; padding: 20px; overflow-y: auto; }
     .drawer.active { left: 0; }
-    .drawer-header { display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: bold; color: #00c853; border-bottom: 1px solid #1e293b; padding-bottom: 10px; margin-bottom: 20px; }
-    .close-btn { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
+    .drawer-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 12px; margin-bottom: 15px; }
+    .drawer-brand { display: flex; align-items: center; gap: 10px; color: #00c853; font-weight: bold; font-size: 18px; }
+    .drawer-brand img { height: 32px; border-radius: 6px; }
+    .close-btn { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
+    
+    /* Language Selector in Drawer */
+    .lang-box { background: #1e293b; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+    .lang-box label { font-size: 14px; color: #94a3b8; font-weight: bold; }
+    .lang-box select { background: #0f172a; color: #00c853; border: 1px solid #334155; padding: 6px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+
     .drawer ul { list-style: none; }
-    .drawer ul li { margin: 15px 0; }
-    .drawer ul li a { color: #ffffff; text-decoration: none; font-size: 16px; display: block; padding: 8px; border-radius: 6px; transition: 0.2s; }
+    .drawer ul li { margin: 12px 0; }
+    .drawer ul li a { color: #ffffff; text-decoration: none; font-size: 15px; display: block; padding: 8px; border-radius: 6px; transition: 0.2s; }
     .drawer ul li a:hover { background: #1e293b; color: #00c853; }
     .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 999; }
     .overlay.active { display: block; }
@@ -41,7 +50,7 @@
     .card .price { color: #00c853; font-size: 18px; font-weight: bold; margin-bottom: 10px; }
     .buy-btn { background: #00c853; color: #ffffff; text-decoration: none; display: block; padding: 10px; border-radius: 8px; font-weight: bold; }
 
-    /* Professional Footer */
+    /* Footer */
     footer { background: #0f172a; border-top: 1px solid #1e293b; padding: 25px 15px; margin-top: 30px; text-align: center; color: #94a3b8; font-size: 14px; }
     .footer-links { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin: 15px 0; }
     .footer-links a { color: #ffffff; text-decoration: none; }
@@ -56,15 +65,27 @@
 <!-- Side Navigation Drawer -->
 <div class="drawer" id="drawer">
   <div class="drawer-header">
-    <span>Menu</span>
+    <div class="drawer-brand">
+      🛍️ THIRD EYE
+    </div>
     <button class="close-btn" onclick="toggleMenu()">✕</button>
   </div>
+
+  <!-- Language Selection -->
+  <div class="lang-box">
+    <label for="langSelect">🌐 Language:</label>
+    <select id="langSelect" onchange="changeLanguage(this.value)">
+      <option value="hi">हिंदी (Hindi)</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+
   <ul>
-    <li><a href="#">🏠 Home</a></li>
-    <li><a href="https://wa.me/919076382864" target="_blank">📞 Customer Support</a></li>
-    <li><a href="https://wa.me/919076382864?text=Track%20My%20Order" target="_blank">📦 Track Order</a></li>
-    <li><a href="#">🛡️ Privacy Policy</a></li>
-    <li><a href="#">📄 Terms & Conditions</a></li>
+    <li><a href="#" id="menu-home">🏠 Home</a></li>
+    <li><a href="https://wa.me/919076382864" target="_blank" id="menu-support">📞 Customer Support</a></li>
+    <li><a href="https://wa.me/919076382864?text=Track%20My%20Order" target="_blank" id="menu-track">📦 Track Order</a></li>
+    <li><a href="#" id="menu-privacy">🛡️ Privacy Policy</a></li>
+    <li><a href="#" id="menu-terms">📄 Terms & Conditions</a></li>
   </ul>
 </div>
 
@@ -129,6 +150,22 @@
     document.getElementById("overlay").classList.toggle("active");
   };
 
+  window.changeLanguage = (lang) => {
+    if(lang === 'hi') {
+      document.getElementById("menu-home").innerText = "🏠 होम (Home)";
+      document.getElementById("menu-support").innerText = "📞 कस्टमर सपोर्ट";
+      document.getElementById("menu-track").innerText = "📦 ऑर्डर ट्रैक करें";
+      document.getElementById("menu-privacy").innerText = "🛡️ प्राइवेसी पॉलिसी";
+      document.getElementById("menu-terms").innerText = "📄 नियम एवं शर्तें";
+    } else {
+      document.getElementById("menu-home").innerText = "🏠 Home";
+      document.getElementById("menu-support").innerText = "📞 Customer Support";
+      document.getElementById("menu-track").innerText = "📦 Track Order";
+      document.getElementById("menu-privacy").innerText = "🛡️ Privacy Policy";
+      document.getElementById("menu-terms").innerText = "📄 Terms & Conditions";
+    }
+  };
+
   window.loginWithGoogle = () => {
     signInWithPopup(auth, provider).catch(err => alert("Login Error: " + err.message));
   };
@@ -183,5 +220,5 @@
 </script>
 
 </body>
-      </html>
-      
+  </html>
+  
