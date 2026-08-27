@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Third Eye Deals - Official Online Shopping Store</title>
+  <meta name="description" content="Welcome to Third Eye Deals. Buy high quality smartwatches, electronics and products at best prices with instant WhatsApp ordering.">
+  <meta name="keywords" content="Third Eye Deals, thirdeyedeals, third eye store, online shopping">
+  <meta name="author" content="Third Eye Deals">
+  
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #000000; color: #ffffff; padding-bottom: 40px; }
+    header { background: #ffffff; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #10b981; }
+    .brand { font-size: 20px; font-weight: 800; color: #10b981; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+    .brand-icon { font-size: 22px; }
+    .admin-toggle-btn { background: #000000; color: #ffffff; border: 1px solid #000000; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 700; }
+    .container { max-width: 900px; margin: 20px auto; padding: 0 16px; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 170px)); gap: 16px; }
+    .card { background: #0f172a; border-radius: 14px; padding: 12px; border: 1px solid #1e293b; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+    .card-img-wrapper { width: 100%; height: 130px; background: #e2e8f0; border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
+    .card img { width: 100%; height: 100%; object-fit: cover; }
+    .card h4 { font-size: 15px; font-weight: 700; color: #ffffff; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .price { color: #10b981; font-weight: 800; font-size: 17px; margin-bottom: 10px; }
+    .btn { background: #10b981; color: #ffffff; border: none; padding: 10px; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; font-size: 14px; }
+    .delete-btn { background: #ef4444; margin-top: 8px; }
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center; padding: 16px; }
+    .modal-box { background: #0f172a; border: 1px solid #10b981; border-radius: 12px; padding: 20px; width: 100%; max-width: 380px; }
+    .modal-box h3 { color: #10b981; margin-bottom: 14px; font-size: 18px; text-align: center; }
+    .form-group { margin-bottom: 12px; text-align: left; }
+    .form-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 4px; }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #334155; background: #000000; color: #fff; border-radius: 6px; outline: none; font-size: 14px; }
+    .form-group textarea { height: 60px; resize: none; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 14px; }
+    .cancel-btn { background: #334155; color: #fff; border: none; padding: 10px; border-radius: 6px; width: 50%; font-weight: 600; cursor: pointer; }
+    .submit-btn { background: #10b981; color: #ffffff; border: none; padding: 10px; border-radius: 6px; width: 50%; font-weight: 700; cursor: pointer; }
+    .admin-panel { display: none; background: #0f172a; padding: 20px; border-radius: 12px; border: 1px solid #10b981; margin-top: 24px; }
+    .empty-msg { text-align: center; color: #94a3b8; grid-column: 1/-1; padding: 40px 0; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand"><span class="brand-icon">🛍️</span> THIRD EYE DEALS</div>
+    <button class="admin-toggle-btn" id="adminToggleBtn">Admin Login</button>
+  </header>
+
+  <div class="container">
+    <div class="product-grid" id="productList"></div>
+
+    <div class="admin-panel" id="adminPanel">
+      <h3 style="color:#10b981; margin-bottom:15px;">✏️ Add New Product</h3>
+      <div class="form-group">
+        <label>Product Title</label>
+        <input type="text" id="pName" placeholder="Smart Watch Ultra">
+      </div>
+      <div class="form-group">
+        <label>Price (₹)</label>
+        <input type="number" id="pPrice" placeholder="1499">
+      </div>
+      <div class="form-group">
+        <label>Image Direct Link (URL)</label>
+        <input type="text" id="pImg" placeholder="Image URL Paste karein">
+      </div>
+      <button class="btn" id="saveProductBtn" style="margin-top: 5px;">Save Product</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-box">
+      <h3>📦 Delivery Details</h3>
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" id="custName" placeholder="Apna Naam likhein">
+      </div>
+      <div class="form-group">
+        <label>Mobile Number *</label>
+        <input type="tel" id="custPhone" placeholder="Mobile Number">
+      </div>
+      <div class="form-group">
+        <label>Complete Address *</label>
+        <textarea id="custAddress" placeholder="Full Address & Pincode"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="cancel-btn" id="closeModalBtn">Cancel</button>
+        <button class="submit-btn" id="confirmOrderBtn">Order Now</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const WHATSAPP_NUMBER = "919076382864";
+    let isAdmin = false;
+    let selectedProduct = null;
+    let products = [];
+
+    try {
+      const stored = localStorage.getItem('thirdEyeProducts_v10');
+      if (stored) {
+        products = JSON.parse(stored);
+      } else {
+        products = [
+          { 
+            name: "Smart Watch Ultra", 
+            price: "1499", 
+            img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&auto=format&fit=crop&q=60" 
+          }
+        ];
+        localStorage.setItem('thirdEyeProducts_v10', JSON.stringify(products));
+      }
+    } catch (e) {
+      products = [];
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById('productList');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      if (products.length === 0) {
+        grid.innerHTML = '<div class="empty-msg">Koi product nahi hai.<br>Admin login karke add karein.</div>';
+        return;
+      }
+
+      products.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        const content = document.createElement('div');
+        const imgWrapper = document.createElement('div');
+        imgWrapper.className = 'card-img-wrapper';
+        const img = document.createElement('img');
+        img.src = item.img;
+        img.alt = item.name;
+        img.onerror = function() { this.src = 'https://via.placeholder.com/150?text=No+Image'; };
+
+        imgWrapper.appendChild(img);
+        const title = document.createElement('h4');
+        title.textContent = item.name;
+        const price = document.createElement('div');
+        price.className = 'price';
+        price.textContent = '₹' + item.price;
+
+        content.appendChild(imgWrapper);
+        content.appendChild(title);
+        content.appendChild(price);
+
+        const actions = document.createElement('div');
+        const buyBtn = document.createElement('button');
+        buyBtn.className = 'btn';
+        buyBtn.textContent = 'Buy Now';
+        buyBtn.addEventListener('click', () => {
+          selectedProduct = item;
+          document.getElementById('checkoutModal').style.display = 'flex';
+        });
+        actions.appendChild(buyBtn);
+
+        if (isAdmin) {
+          const deleteBtn = document.createElement('button');
+          deleteBtn.className = 'btn delete-btn';
+          deleteBtn.textContent = 'Delete';
+          deleteBtn.addEventListener('click', () => {
+            if (confirm("Kya aap is product ko delete karna chahte hain?")) {
+              products.splice(index, 1);
+              localStorage.setItem('thirdEyeProducts_v10', JSON.stringify(products));
+              renderProducts();
+            }
+          });
+          actions.appendChild(deleteBtn);
+        }
+
+        card.appendChild(content);
+        card.appendChild(actions);
+        grid.appendChild(card);
+      });
+    }
+
+    document.getElementById('closeModalBtn').addEventListener('click', () => {
+      document.getElementById('checkoutModal').style.display = 'none';
+    });
+
+    document.getElementById('confirmOrderBtn').addEventListener('click', () => {
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+
+      if (!name || !phone || !address) {
+        alert("Saari details bharna zaroori hai!");
+        return;
+      }
+
+      const text = `🛍️ *NEW ORDER - THIRD EYE DEALS*\n---------------------------\n📌 *Product:* ${selectedProduct.name}\n💰 *Price:* ₹${selectedProduct.price}\n\n👤 *Customer Details:*\n• *Name:* ${name}\n• *Phone:* ${phone}\n• *Address:* ${address}\n---------------------------`;
+      
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+      document.getElementById('checkoutModal').style.display = 'none';
+    });
+
+    document.getElementById('adminToggleBtn').addEventListener('click', () => {
+      const adminPanel = document.getElementById('adminPanel');
+      if (!isAdmin) {
+        const pass = prompt("Admin Password:");
+        if (pass === "1234") {
+          isAdmin = true;
+          adminPanel.style.display = 'block';
+          alert("Admin Mode Active!");
+        } else if (pass !== null) {
+          alert("Galat Password!");
+        }
+      } else {
+        isAdmin = false;
+        adminPanel.style.display = 'none';
+      }
+      renderProducts();
+    });
+
+    document.getElementById('saveProductBtn').addEventListener('click', () => {
+      const name = document.getElementById('pName').value.trim();
+      const price = document.getElementById('pPrice').value.trim();
+      const img = document.getElementById('pImg').value.trim();
+
+      if (!name || !price || !img) {
+        alert("Teeno details bharein!");
+        return;
+      }
+
+      products.push({ name, price, img });
+      localStorage.setItem('thirdEyeProducts_v10', JSON.stringify(products));
+
+      document.getElementById('pName').value = '';
+      document.getElementById('pPrice').value = '';
+      document.getElementById('pImg').value = '';
+
+      renderProducts();
+      alert("Product Add Ho Gaya!");
+    });
+
+    renderProducts();
+  </script>
+</body>
+</html>
