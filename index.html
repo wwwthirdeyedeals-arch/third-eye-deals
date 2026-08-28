@@ -89,11 +89,14 @@
 
     .main-content { flex: 1; padding: 20px; max-width: 1200px; margin: 0 auto; width: 100%; }
     .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-    .card { background: #0b1329; border: 1px solid #1e293b; border-radius: 14px; padding: 14px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+    .card { background: #0b1329; border: 1px solid #1e293b; border-radius: 14px; padding: 14px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: space-between; }
     .card img { width: 100%; height: 170px; object-fit: cover; border-radius: 10px; background: #152238; }
     .card h3 { font-size: 16px; margin: 12px 0 6px; color: #ffffff; }
     .card .price { color: #00c853; font-size: 18px; font-weight: bold; margin-bottom: 12px; }
+    .card-actions { display: flex; gap: 8px; flex-direction: column; }
     .buy-btn { background: #00c853; color: #000; text-decoration: none; display: block; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 14px; }
+    .delete-btn { background: #ef4444; color: #fff; border: none; padding: 8px; border-radius: 8px; font-weight: bold; font-size: 12px; cursor: pointer; display: none; }
+    .admin-mode .delete-btn { display: block; }
 
     .no-product { text-align: center; color: #94a3b8; grid-column: 1 / -1; padding: 60px 20px; font-size: 15px; }
 
@@ -255,7 +258,7 @@
 <div id="about-section" class="page-section">
   <h2>⚙️ Settings & About Site</h2>
   <p><strong>App Name:</strong> Third Eye Deals</p>
-  <p><strong>Version:</strong> 3.8 (Debug Fixed)</p>
+  <p><strong>Version:</strong> 3.9 (Multi-Product Fixed)</p>
 </div>
 
 <footer>
@@ -283,15 +286,11 @@
         return;
       }
 
-      const cleanEmail = emailInput.replace("www.", "");
-      const cleanAdmin = ADMIN_EMAIL.replace("www.", "");
-
-      if (cleanEmail !== cleanAdmin) {
+      if (emailInput !== ADMIN_EMAIL) {
         alert("Access denied! Enter valid Admin Email.");
         return;
       }
 
-      // Direct Login Success
       document.getElementById("admin-email").value = "";
       passInput.value = "";
       document.getElementById("admin-login-box").style.display = "none";
@@ -321,6 +320,7 @@
       if (!file) return;
       const reader = new FileReader();
       reader.onload = function(event) {
+        // Image compression/resizing can be avoided for simplicity, but we limit file reading
         selectedImageBase64 = event.target.result;
         previewContainer.innerHTML = `<img src="${selectedImageBase64}" class="preview-thumb">`;
         selectImgBtn.innerText = "📷 Photo Selected ✅";
@@ -336,24 +336,29 @@
       if (!selectedImageBase64) return alert("Please select a photo from gallery!");
 
       const productData = {
+        id: "loc_" + Date.now(),
         name: name,
         price: price,
         img: selectedImageBase64,
         createdAt: Date.now()
       };
 
-      let localProducts = JSON.parse(localStorage.getItem("local_products") || "[]");
-      localProducts.unshift({ id: "loc_" + Date.now(), ...productData });
-      localStorage.setItem("local_products", JSON.stringify(localProducts));
+      try {
+        let localProducts = JSON.parse(localStorage.getItem("local_products") || "[]");
+        localProducts.unshift(productData); // Naya product sabse upar add hoga
+        localStorage.setItem("local_products", JSON.stringify(localProducts));
 
-      alert("Product Added Successfully!");
-      document.getElementById("p-name").value = "";
-      document.getElementById("p-price").value = "";
-      selectedImageBase64 = "";
-      previewContainer.innerHTML = "";
-      selectImgBtn.innerText = "📷 Choose Photo from Gallery";
-      document.getElementById("admin-panel").style.display = "none";
-      loadProducts();
+        alert("Product Added Successfully!");
+        document.getElementById("p-name").value = "";
+        document.getElementById("p-price").value = "";
+        selectedImageBase64 = "";
+        previewContainer.innerHTML = "";
+        selectImgBtn.innerText = "📷 Choose Photo from Gallery";
+        document.getElementById("admin-panel").style.display = "none";
+        loadProducts();
+      } catch (err) {
+        alert("Storage Full! Please use smaller image size or delete old products.");
+      }
     });
 
     loadProducts();
@@ -367,10 +372,25 @@
     });
   });
 
+  function deleteProduct(id) {
+    if (confirm("Are you sure you want to delete this product?")) {
+      let localProducts = JSON.parse(localStorage.getItem("local_products") || "[]");
+      localProducts = localProducts.filter(p => p.id !== id);
+      localStorage.setItem("local_products", JSON.stringify(localProducts));
+      loadProducts();
+    }
+  }
+
   function renderProductsList(productsArray) {
     const grid = document.getElementById("product-list");
     grid.innerHTML = "";
     
+    if (isAdminLoggedIn) {
+      grid.classList.add("admin-mode");
+    } else {
+      grid.classList.remove("admin-mode");
+    }
+
     if (!productsArray || productsArray.length === 0) {
       grid.innerHTML = `<div class="no-product">No products available yet. Admin can login and add products.</div>`;
       return;
@@ -380,24 +400,9 @@
       const safeImg = p.img || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400';
       const safeName = p.name || 'Product';
       const safePrice = p.price || '0';
+      const safeId = p.id || '';
 
       grid.innerHTML += `
         <div class="card">
-          <img src="${safeImg}" alt="${safeName}">
-          <h3>${safeName}</h3>
-          <div class="price">₹${safePrice}</div>
-          <a class="buy-btn" href="mailto:thirdeyedeals@gmail.com?subject=Order%20Query%20for%20${encodeURIComponent(safeName)}">Buy Now / Inquiry</a>
-        </div>
-      `;
-    });
-  }
-
-  function loadProducts() {
-    let localProducts = JSON.parse(localStorage.getItem("local_products") || "[]");
-    renderProductsList(localProducts);
-  }
-</script>
-
-</body>
-    </html>
-    
+          <div>
+            <img src="${safeImg}" alt="${safeName
