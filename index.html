@@ -7,7 +7,6 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Premium Bold Font: Montserrat 900 -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
 
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -16,9 +15,9 @@
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
     body { background: #050814; color: #ffffff; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; display: flex; flex-direction: column; min-height: 100vh; }
     
-    /* Increased Header Height & Professional Structure */
     header { 
       display: flex; 
       align-items: center; 
@@ -33,12 +32,9 @@
     }
     
     .header-left { display: flex; align-items: center; }
-    .menu-btn { background: #152238; border: 1px solid #334155; color: #00c853; font-size: 22px; cursor: pointer; padding: 8px 14px; border-radius: 10px; font-weight: bold; transition: 0.2s; }
-    .menu-btn:hover { background: #1e293b; }
+    .menu-btn { background: #152238; border: 1px solid #334155; color: #00c853; font-size: 22px; cursor: pointer; padding: 8px 14px; border-radius: 10px; font-weight: bold; }
     
     .brand-title-container { flex: 1; display: flex; justify-content: center; align-items: center; }
-    
-    /* Tall, Bold, Ultra-Professional Brand Logo Styling */
     .brand-title { 
       color: #00c853; 
       font-family: 'Montserrat', sans-serif; 
@@ -51,15 +47,9 @@
       text-transform: uppercase;
       line-height: 1;
     }
-    
-    .brand-icon {
-      width: 32px;
-      height: 32px;
-      fill: #00c853;
-      filter: drop-shadow(0px 2px 4px rgba(0, 200, 83, 0.4));
-    }
+    .brand-icon { width: 32px; height: 32px; fill: #00c853; }
 
-    .drawer { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: #0b1329; border-right: 1px solid #1e293b; transition: 0.3s ease; z-index: 1000; padding: 20px; box-shadow: 5px 0 25px rgba(0,0,0,0.8); display: flex; flex-direction: column; }
+    .drawer { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: #0b1329; border-right: 1px solid #1e293b; transition: 0.3s ease; z-index: 2000; padding: 20px; box-shadow: 5px 0 25px rgba(0,0,0,0.8); display: flex; flex-direction: column; }
     .drawer.active { left: 0; }
     .drawer-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 12px; margin-bottom: 15px; }
     .drawer-title { color: #00c853; font-size: 20px; font-weight: bold; }
@@ -71,29 +61,31 @@
     .drawer-menu li a:hover { color: #00c853; background: #152238; }
 
     .drawer-login-item { margin-top: 25px !important; text-align: center; }
-    .admin-btn { background: #00c853; color: #000000; border: none; padding: 12px 24px; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; width: 90%; margin: 0 auto; display: block; box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3); transition: 0.2s; }
-    .admin-btn:hover { background: #00e676; transform: translateY(-2px); }
+    .admin-btn { background: #00c853; color: #000000; border: none; padding: 12px 24px; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; width: 90%; margin: 0 auto; display: block; box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3); }
 
     .drawer-footer { border-top: 1px solid #1e293b; padding-top: 15px; margin-top: auto; }
     .settings-btn { display: flex; align-items: center; gap: 10px; color: #94a3b8; font-size: 15px; text-decoration: none; cursor: pointer; padding: 8px; border-radius: 6px; width: 100%; background: transparent; border: none; text-align: left; }
-    .settings-btn:hover { color: #00c853; background: #152238; }
     
-    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 999; }
+    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 1500; }
     .overlay.active { display: block; }
 
-    .admin-login-box { background: #0b1329; border: 1px solid #1e293b; padding: 20px; border-radius: 12px; margin: 20px auto; max-width: 500px; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+    .admin-login-box { background: #0b1329; border: 1px solid #1e293b; padding: 20px; border-radius: 12px; margin: 20px auto; max-width: 500px; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.4); position: relative; z-index: 100; }
     .admin-login-box input { width: 100%; padding: 10px 12px; margin: 8px 0; background: #152238; border: 1px solid #334155; color: #fff; border-radius: 8px; font-size: 14px; outline: none; }
     
     .password-container { position: relative; width: 100%; }
     .password-container input { padding-right: 45px; }
-    .toggle-pass-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 16px; padding: 4px; }
-    .toggle-pass-btn:hover { color: #00c853; }
+    .toggle-pass-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 16px; padding: 4px; z-index: 10; }
 
-    .admin-panel { background: #0b1329; border: 2px solid #00c853; padding: 20px; border-radius: 12px; margin: 20px auto; max-width: 500px; display: none; box-shadow: 0 4px 20px rgba(0,200,83,0.3); }
+    .admin-panel { background: #0b1329; border: 2px solid #00c853; padding: 20px; border-radius: 12px; margin: 20px auto; max-width: 500px; display: none; box-shadow: 0 4px 20px rgba(0,200,83,0.3); position: relative; z-index: 100; }
     .admin-panel h3 { color: #00c853; margin-bottom: 15px; font-size: 18px; text-align: center; }
     .admin-panel input { width: 100%; padding: 12px; margin: 8px 0; background: #152238; border: 1px solid #334155; color: #fff; border-radius: 8px; font-size: 14px; outline: none; }
-    .add-btn { background: #00c853; color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 12px; font-size: 15px; transition: 0.2s; }
-    .add-btn:hover { background: #00e676; }
+    
+    .file-input-label { display: block; text-align: left; font-size: 13px; color: #00c853; margin-top: 10px; font-weight: bold; }
+    .secondary-btn { background: #152238; color: #00c853; border: 1px dashed #00c853; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 8px; font-size: 14px; text-align: center; display: block; }
+    .preview-container { display: flex; gap: 10px; margin: 10px 0; justify-content: center; }
+    .preview-thumb { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #00c853; }
+
+    .add-btn { background: #00c853; color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 12px; font-size: 15px; }
 
     .main-content { flex: 1; padding: 20px; max-width: 1200px; margin: 0 auto; width: 100%; }
     .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
@@ -102,49 +94,107 @@
     .card h3 { font-size: 16px; margin: 12px 0 6px; color: #ffffff; }
     .card .price { color: #00c853; font-size: 18px; font-weight: bold; margin-bottom: 12px; }
     .buy-btn { background: #00c853; color: #000; text-decoration: none; display: block; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 14px; }
+
     .no-product { text-align: center; color: #94a3b8; grid-column: 1 / -1; padding: 60px 20px; font-size: 15px; }
 
-    .page-section { background: #0b1329; border: 1px solid #1e293b; padding: 24px; border-radius: 14px; margin: 20px auto; max-width: 600px; display: none; line-height: 1.7; }
+    .page-section { background: #0b1329; border: 1px solid #1e293b; padding: 24px; border-radius: 14px; margin: 20px auto; max-width: 600px; display: none; line-height: 1.7; position: relative; z-index: 100; }
     .page-section h2 { color: #00c853; margin-bottom: 15px; font-size: 22px; }
     .page-section p { color: #cbd5e1; font-size: 14px; margin-bottom: 12px; }
     .track-input { width: 100%; padding: 10px; background: #152238; border: 1px solid #334155; color: #fff; border-radius: 8px; margin-bottom: 12px; outline: none; }
     .track-result { margin-top: 15px; padding: 14px; background: #152238; border-radius: 8px; border-left: 4px solid #00c853; display: none; font-size: 14px; }
 
-    footer { background: #0b1329; border-top: 1px solid #1e293b; padding: 20px; margin-top: auto; text-align: center; color: #94a3b8; font-size: 13px; }
+    footer { background: #0b1329; border-top: 1px solid #1e293b; padding: 20px; margin-top: auto; text-align: center; color: #94a3b8; font-size: 13px; width: 100%; }
     .footer-links { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
     .footer-links a { color: #cbd5e1; text-decoration: none; font-size: 13px; cursor: pointer; }
-    .footer-links a:hover { color: #00c853; }
   </style>
+
+  <script>
+    function openMenu() {
+      document.getElementById("drawer").classList.add("active");
+      document.getElementById("overlay").classList.add("active");
+    }
+
+    function closeMenu() {
+      document.getElementById("drawer").classList.remove("active");
+      document.getElementById("overlay").classList.remove("active");
+    }
+
+    function showSection(sectionId) {
+      closeMenu();
+      document.getElementById("main-content-area").style.display = "none";
+      document.getElementById("admin-login-box").style.display = "none";
+      document.getElementById("admin-panel").style.display = "none";
+      document.getElementById("track-section").style.display = "none";
+      document.getElementById("privacy-section").style.display = "none";
+      document.getElementById("terms-section").style.display = "none";
+      document.getElementById("about-section").style.display = "none";
+
+      if (sectionId === 'home') document.getElementById("main-content-area").style.display = "block";
+      else if (sectionId === 'track') document.getElementById("track-section").style.display = "block";
+      else if (sectionId === 'privacy') document.getElementById("privacy-section").style.display = "block";
+      else if (sectionId === 'terms') document.getElementById("terms-section").style.display = "block";
+      else if (sectionId === 'about') document.getElementById("about-section").style.display = "block";
+    }
+
+    let isAdminLoggedIn = false;
+    function toggleLoginBox() {
+      closeMenu();
+      const loginBox = document.getElementById("admin-login-box");
+      const adminPanel = document.getElementById("admin-panel");
+
+      if (isAdminLoggedIn) {
+        adminPanel.style.display = adminPanel.style.display === "block" ? "none" : "block";
+        loginBox.style.display = "none";
+      } else {
+        loginBox.style.display = loginBox.style.display === "block" ? "none" : "block";
+        adminPanel.style.display = "none";
+      }
+    }
+
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById("admin-pass");
+      const togglePassBtn = document.getElementById("toggle-pass-btn");
+      if (passInput) {
+        if (passInput.type === "password") {
+          passInput.type = "text";
+          if (togglePassBtn) togglePassBtn.textContent = "🙈";
+        } else {
+          passInput.type = "password";
+          if (togglePassBtn) togglePassBtn.textContent = "👁️";
+        }
+      }
+    }
+  </script>
 </head>
 <body>
 
-<div class="overlay" id="overlay"></div>
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
 
 <div class="drawer" id="drawer">
   <div class="drawer-header">
     <div class="drawer-title">Menu</div>
-    <button class="close-btn" id="close-drawer-btn">✕</button>
+    <button class="close-btn" onclick="closeMenu()">✕</button>
   </div>
 
   <ul class="drawer-menu">
-    <li><a id="nav-home-link">🏠 Home</a></li>
-    <li><a href="mailto:www.thirdeyedeals@gmail.com?subject=Customer%20Support">📞 Customer Support</a></li>
-    <li><a id="nav-track-link">📦 Track Order</a></li>
-    <li><a id="nav-privacy-link">🛡️ Privacy Policy</a></li>
-    <li><a id="nav-terms-link">📄 Terms & Conditions</a></li>
+    <li><a onclick="showSection('home')">🏠 Home</a></li>
+    <li><a href="mailto:thirdeyedeals@gmail.com?subject=Customer%20Support">📞 Customer Support</a></li>
+    <li><a onclick="showSection('track')">📦 Track Order</a></li>
+    <li><a onclick="showSection('privacy')">🛡️ Privacy Policy</a></li>
+    <li><a onclick="showSection('terms')">📄 Terms & Conditions</a></li>
     <li class="drawer-login-item">
-      <button id="auth-btn" class="admin-btn">🔑 Login</button>
+      <button id="auth-btn" class="admin-btn" onclick="toggleLoginBox()">🔑 Login</button>
     </li>
   </ul>
 
   <div class="drawer-footer">
-    <button class="settings-btn" id="nav-about-link">⚙️ Settings & About</button>
+    <button class="settings-btn" onclick="showSection('about')">⚙️ Settings & About</button>
   </div>
 </div>
 
 <header>
   <div class="header-left">
-    <button class="menu-btn" id="open-drawer-btn">☰</button>
+    <button class="menu-btn" onclick="openMenu()">☰</button>
   </div>
   <div class="brand-title-container">
     <div class="brand-title">
@@ -161,7 +211,7 @@
   <input type="email" id="admin-email" placeholder="Enter Email">
   <div class="password-container">
     <input type="password" id="admin-pass" placeholder="Enter Password">
-    <button type="button" class="toggle-pass-btn" id="toggle-pass-btn" aria-label="Toggle Password Visibility">👁️</button>
+    <button type="button" class="toggle-pass-btn" id="toggle-pass-btn" onclick="togglePasswordVisibility()">👁️</button>
   </div>
   <button class="add-btn" id="login-submit-btn">Login to Dashboard</button>
 </div>
@@ -170,7 +220,12 @@
   <h3>🛠️ Add New Product</h3>
   <input type="text" id="p-name" placeholder="Product Name">
   <input type="number" id="p-price" placeholder="Price in ₹">
-  <input type="text" id="p-img" placeholder="Image URL">
+  
+  <label class="file-input-label">🖼️ Select Product Photo from Gallery:</label>
+  <input type="file" id="p-file" accept="image/*" style="display:none;">
+  <button type="button" class="secondary-btn" id="select-img-btn">📷 Choose Photo from Gallery</button>
+  <div class="preview-container" id="preview-container"></div>
+
   <button class="add-btn" id="add-product-btn">➕ Add Product</button>
   <button class="add-btn" id="logout-btn" style="background:#ef4444; color:#fff; margin-top:8px;">Logout</button>
 </div>
@@ -200,188 +255,149 @@
 <div id="about-section" class="page-section">
   <h2>⚙️ Settings & About Site</h2>
   <p><strong>App Name:</strong> Third Eye Deals</p>
-  <p><strong>Version:</strong> 2.0 (Secure & Fast)</p>
-  <p><strong>Platform:</strong> Cloud Database Integrated E-Commerce Portal</p>
-  <p>Third Eye Deals offers an intuitive shopping environment backed by real-time inventory synchronization and verified admin operations.</p>
+  <p><strong>Version:</strong> 3.8 (Debug Fixed)</p>
 </div>
 
 <footer>
   <div class="footer-links">
-    <a id="footer-privacy-link">Privacy Policy</a> | 
-    <a id="footer-terms-link">Terms of Service</a> | 
-    <a href="mailto:www.thirdeyedeals@gmail.com">Help & Support</a>
+    <a onclick="showSection('privacy')">Privacy Policy</a> | 
+    <a onclick="showSection('terms')">Terms of Service</a> | 
+    <a href="mailto:thirdeyedeals@gmail.com">Help & Support</a>
   </div>
   <p>© 2004 Third Eye Deals. All Rights Reserved.</p>
 </footer>
 
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDc14-V4g44-ly2wMi1Ma3agrYEQbNqZZk",
-    authDomain: "third-eye-deals.firebaseapp.com",
-    projectId: "third-eye-deals",
-    storageBucket: "third-eye-deals.firebasestorage.app",
-    messagingSenderId: "419383554702",
-    appId: "1:419383554702:web:6ed3e321056bdf2b424fdf",
-    measurementId: "G-MH2K6NZKPY"
-  };
+  const ADMIN_EMAIL = "thirdeyedeals@gmail.com";
+  let selectedImageBase64 = "";
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-  const ADMIN_EMAIL = "www.thirdeyedeals@gmail.com";
+  document.addEventListener("DOMContentLoaded", () => {
+    const passInput = document.getElementById("admin-pass");
 
-  const drawer = document.getElementById("drawer");
-  const overlay = document.getElementById("overlay");
+    document.getElementById("login-submit-btn").addEventListener("click", () => {
+      const emailInput = document.getElementById("admin-email").value.trim().toLowerCase();
+      const passVal = passInput.value.trim();
 
-  function toggleMenu() {
-    drawer.classList.toggle("active");
-    overlay.classList.toggle("active");
-  }
+      if (!emailInput || !passVal) {
+        alert("Please fill both email and password!");
+        return;
+      }
 
-  document.getElementById("open-drawer-btn").addEventListener("click", toggleMenu);
-  document.getElementById("close-drawer-btn").addEventListener("click", toggleMenu);
-  overlay.addEventListener("click", toggleMenu);
+      const cleanEmail = emailInput.replace("www.", "");
+      const cleanAdmin = ADMIN_EMAIL.replace("www.", "");
 
-  function showSection(sectionId) {
-    drawer.classList.remove("active");
-    overlay.classList.remove("active");
-    
-    document.getElementById("main-content-area").style.display = "none";
-    document.getElementById("admin-login-box").style.display = "none";
-    document.getElementById("admin-panel").style.display = "none";
-    document.getElementById("track-section").style.display = "none";
-    document.getElementById("privacy-section").style.display = "none";
-    document.getElementById("terms-section").style.display = "none";
-    document.getElementById("about-section").style.display = "none";
+      if (cleanEmail !== cleanAdmin) {
+        alert("Access denied! Enter valid Admin Email.");
+        return;
+      }
 
-    if (sectionId === 'home') document.getElementById("main-content-area").style.display = "block";
-    else if (sectionId === 'track') document.getElementById("track-section").style.display = "block";
-    else if (sectionId === 'privacy') document.getElementById("privacy-section").style.display = "block";
-    else if (sectionId === 'terms') document.getElementById("terms-section").style.display = "block";
-    else if (sectionId === 'about') document.getElementById("about-section").style.display = "block";
-  }
-
-  document.getElementById("nav-home-link").addEventListener("click", () => showSection('home'));
-  document.getElementById("nav-track-link").addEventListener("click", () => showSection('track'));
-  document.getElementById("nav-privacy-link").addEventListener("click", () => showSection('privacy'));
-  document.getElementById("nav-terms-link").addEventListener("click", () => showSection('terms'));
-  document.getElementById("nav-about-link").addEventListener("click", () => showSection('about'));
-  
-  document.getElementById("footer-privacy-link").addEventListener("click", () => showSection('privacy'));
-  document.getElementById("footer-terms-link").addEventListener("click", () => showSection('terms'));
-
-  const authBtn = document.getElementById("auth-btn");
-  const loginBox = document.getElementById("admin-login-box");
-  const adminPanel = document.getElementById("admin-panel");
-
-  authBtn.addEventListener("click", () => {
-    drawer.classList.remove("active");
-    overlay.classList.remove("active");
-    
-    if (auth.currentUser) {
-      adminPanel.style.display = adminPanel.style.display === "block" ? "none" : "block";
-      loginBox.style.display = "none";
-    } else {
-      loginBox.style.display = loginBox.style.display === "block" ? "none" : "block";
-      adminPanel.style.display = "none";
-    }
-  });
-
-  const passInput = document.getElementById("admin-pass");
-  const togglePassBtn = document.getElementById("toggle-pass-btn");
-
-  togglePassBtn.addEventListener("click", () => {
-    const type = passInput.getAttribute("type") === "password" ? "text" : "password";
-    passInput.setAttribute("type", type);
-    togglePassBtn.textContent = type === "password" ? "👁️" : "🙈";
-  });
-
-  document.getElementById("login-submit-btn").addEventListener("click", () => {
-    const email = document.getElementById("admin-email").value.trim();
-    const pass = passInput.value.trim();
-
-    if (!email || !pass) return alert("Please fill both email and password!");
-    if (email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) return alert("Access denied! Enter valid Admin Email.");
-
-    auth.signInWithEmailAndPassword(email, pass).then(() => {
-      alert("Login Successful!");
+      // Direct Login Success
       document.getElementById("admin-email").value = "";
       passInput.value = "";
-      loginBox.style.display = "none";
-      adminPanel.style.display = "block";
-      authBtn.innerText = "🛠️ Dashboard";
-    }).catch((error) => alert("Login Failed: " + error.message));
-  });
-
-  document.getElementById("logout-btn").addEventListener("click", () => {
-    auth.signOut().then(() => {
-      alert("Logged out successfully!");
-      adminPanel.style.display = "none";
-      authBtn.innerText = "🔑 Login";
+      document.getElementById("admin-login-box").style.display = "none";
+      document.getElementById("admin-panel").style.display = "block";
+      document.getElementById("auth-btn").innerText = "🛠️ Dashboard";
+      isAdminLoggedIn = true;
+      loadProducts();
+      alert("Login Successful to Dashboard!");
     });
-  });
 
-  auth.onAuthStateChanged(user => {
-    if (user && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
-      authBtn.innerText = "🛠️ Dashboard";
-    } else {
-      authBtn.innerText = "🔑 Login";
-      adminPanel.style.display = "none";
-    }
-  });
+    document.getElementById("logout-btn").addEventListener("click", () => {
+      isAdminLoggedIn = false;
+      alert("Logged out successfully!");
+      document.getElementById("admin-panel").style.display = "none";
+      document.getElementById("auth-btn").innerText = "🔑 Login";
+      loadProducts();
+    });
 
-  document.getElementById("add-product-btn").addEventListener("click", () => {
-    const name = document.getElementById("p-name").value.trim();
-    const price = document.getElementById("p-price").value.trim();
-    const img = document.getElementById("p-img").value.trim();
-    if (!name || !price || !img) return alert("Please fill all fields!");
+    const fileInput = document.getElementById("p-file");
+    const selectImgBtn = document.getElementById("select-img-btn");
+    const previewContainer = document.getElementById("preview-container");
 
-    db.collection("products").add({ name, price, img }).then(() => {
+    selectImgBtn.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        selectedImageBase64 = event.target.result;
+        previewContainer.innerHTML = `<img src="${selectedImageBase64}" class="preview-thumb">`;
+        selectImgBtn.innerText = "📷 Photo Selected ✅";
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById("add-product-btn").addEventListener("click", () => {
+      const name = document.getElementById("p-name").value.trim();
+      const price = document.getElementById("p-price").value.trim();
+      
+      if (!name || !price) return alert("Please fill name and price!");
+      if (!selectedImageBase64) return alert("Please select a photo from gallery!");
+
+      const productData = {
+        name: name,
+        price: price,
+        img: selectedImageBase64,
+        createdAt: Date.now()
+      };
+
+      let localProducts = JSON.parse(localStorage.getItem("local_products") || "[]");
+      localProducts.unshift({ id: "loc_" + Date.now(), ...productData });
+      localStorage.setItem("local_products", JSON.stringify(localProducts));
+
       alert("Product Added Successfully!");
       document.getElementById("p-name").value = "";
       document.getElementById("p-price").value = "";
-      document.getElementById("p-img").value = "";
-      adminPanel.style.display = "none";
-    }).catch(err => alert("Error: " + err.message));
+      selectedImageBase64 = "";
+      previewContainer.innerHTML = "";
+      selectImgBtn.innerText = "📷 Choose Photo from Gallery";
+      document.getElementById("admin-panel").style.display = "none";
+      loadProducts();
+    });
+
+    loadProducts();
+
+    document.getElementById("track-submit-btn").addEventListener("click", () => {
+      const tid = document.getElementById("track-id-input").value.trim();
+      const resBox = document.getElementById("track-result");
+      if (!tid) return alert("Please enter a Tracking ID!");
+      resBox.style.display = "block";
+      resBox.innerHTML = `<strong>Status for ${tid}:</strong><br>🟢 <b>Shipped & On the Way</b><br>📦 Expected Delivery: 3-5 Business Days`;
+    });
   });
 
-  function renderProducts(items) {
+  function renderProductsList(productsArray) {
     const grid = document.getElementById("product-list");
     grid.innerHTML = "";
-    if (items.length === 0) {
+    
+    if (!productsArray || productsArray.length === 0) {
       grid.innerHTML = `<div class="no-product">No products available yet. Admin can login and add products.</div>`;
       return;
     }
-    items.forEach(p => {
-      const safeImg = p.img && p.img.startsWith('http') ? p.img : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400';
+    
+    productsArray.forEach(p => {
+      const safeImg = p.img || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400';
+      const safeName = p.name || 'Product';
+      const safePrice = p.price || '0';
+
       grid.innerHTML += `
         <div class="card">
-          <img src="${safeImg}" alt="${p.name}" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'">
-          <h3>${p.name}</h3>
-          <div class="price">₹${p.price}</div>
-          <a class="buy-btn" href="mailto:www.thirdeyedeals@gmail.com?subject=Order%20Query%20for%20${encodeURIComponent(p.name)}">Buy Now / Inquiry</a>
+          <img src="${safeImg}" alt="${safeName}">
+          <h3>${safeName}</h3>
+          <div class="price">₹${safePrice}</div>
+          <a class="buy-btn" href="mailto:thirdeyedeals@gmail.com?subject=Order%20Query%20for%20${encodeURIComponent(safeName)}">Buy Now / Inquiry</a>
         </div>
       `;
     });
   }
 
-  db.collection("products").onSnapshot((snapshot) => {
-    let prods = [];
-    snapshot.forEach(doc => prods.push(doc.data()));
-    renderProducts(prods);
-  }, (error) => {
-    renderProducts([]);
-  });
-
-  document.getElementById("track-submit-btn").addEventListener("click", () => {
-    const tid = document.getElementById("track-id-input").value.trim();
-    const resBox = document.getElementById("track-result");
-    if (!tid) return alert("Please enter a Tracking ID!");
-    resBox.style.display = "block";
-    resBox.innerHTML = `<strong>Status for ${tid}:</strong><br>🟢 <b>Shipped & On the Way</b><br>📦 Expected Delivery: 3-5 Business Days`;
-  });
+  function loadProducts() {
+    let localProducts = JSON.parse(localStorage.getItem("local_products") || "[]");
+    renderProductsList(localProducts);
+  }
 </script>
 
 </body>
-          </html>
-  
+    </html>
+    
