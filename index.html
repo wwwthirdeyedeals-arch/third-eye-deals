@@ -207,7 +207,6 @@
 
 <div id="admin-login-box" class="admin-login-box">
   <h3 style="color:#00c853; margin-bottom:10px;">Admin Secure Login</h3>
-  <!-- Manual Input Fields (Blank by default) -->
   <input type="email" id="admin-email" placeholder="Enter Admin Email" value="">
   <div class="password-container">
     <input type="password" id="admin-pass" placeholder="Enter Admin Password" value="">
@@ -255,7 +254,7 @@
 <div id="about-section" class="page-section">
   <h2>⚙️ Settings & About Site</h2>
   <p><strong>App Name:</strong> Third Eye Deals</p>
-  <p><strong>Version:</strong> 5.4 (Manual Input & Secure Check)</p>
+  <p><strong>Version:</strong> 5.5 (Auto Image Compressor)</p>
 </div>
 
 <footer>
@@ -277,7 +276,6 @@
       const email = document.getElementById("admin-email").value.trim();
       const pass = document.getElementById("admin-pass").value.trim();
 
-      // Set to match photo requirements: www.thirdeyedeals@gmail.com and ikbigbang@1
       if (email === "www.thirdeyedeals@gmail.com" && pass === "ikbigbang@1") {
         isAdminLoggedIn = true;
         document.getElementById("admin-email").value = "";
@@ -306,14 +304,44 @@
 
     selectImgBtn.addEventListener("click", () => fileInput.click());
 
+    // Automatic Image Resizer & Compressor to prevent storage limit errors
     fileInput.addEventListener("change", (e) => {
       const file = e.target.files[0];
       if (!file) return;
+
       const reader = new FileReader();
       reader.onload = function(event) {
-        selectedImageBase64 = event.target.result;
-        previewContainer.innerHTML = `<img src="${selectedImageBase64}" class="preview-thumb">`;
-        selectImgBtn.innerText = "📷 Photo Selected ✅";
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 400;
+          const MAX_HEIGHT = 400;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Compress image to JPEG format with 0.7 quality
+          selectedImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
+          previewContainer.innerHTML = `<img src="${selectedImageBase64}" class="preview-thumb">`;
+          selectImgBtn.innerText = "📷 Photo Compressed & Selected ✅";
+        };
       };
       reader.readAsDataURL(file);
     });
@@ -346,7 +374,7 @@
         document.getElementById("admin-panel").style.display = "none";
         loadProducts();
       } catch (err) {
-        alert("Storage is full or image is too large. Try a smaller image.");
+        alert("Storage is full. Please delete some old products to add new ones.");
       }
     });
 
@@ -380,28 +408,4 @@
     }
 
     if (products.length === 0) {
-      grid.innerHTML = `<div class="no-product">No products available yet. Login as admin to add products.</div>`;
-      return;
-    }
-
-    products.forEach(p => {
-      grid.innerHTML += `
-        <div class="card">
-          <div>
-            <img src="${p.img}" alt="${p.name}">
-            <h3>${p.name}</h3>
-            <div class="price">₹${p.price}</div>
-          </div>
-          <div class="card-actions">
-            <a class="buy-btn" href="mailto:thirdeyedeals@gmail.com?subject=Order%20for%20${encodeURIComponent(p.name)}">Buy Now / Inquiry</a>
-            <button class="delete-btn" onclick="deleteProduct('${p.id}')">🗑️ Delete Product</button>
-          </div>
-        </div>
-      `;
-    });
-  }
-</script>
-
-</body>
-  </html>
-  
+      grid.innerHTML = `<div class="no-product">No products available yet. Login as admin to add products.</di
