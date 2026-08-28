@@ -107,6 +107,12 @@
   </style>
 
   <script>
+    // Automatically clear all old products on first load of version 13.0
+    if (!localStorage.getItem("v13_cleared")) {
+      localStorage.removeItem("all_products");
+      localStorage.setItem("v13_cleared", "true");
+    }
+
     function openMenu() {
       document.getElementById("drawer").classList.add("active");
       document.getElementById("overlay").classList.add("active");
@@ -280,7 +286,7 @@
 <div id="about-section" class="page-section">
   <h2>⚙️ Settings & About Site</h2>
   <p><strong>App Name:</strong> Third Eye Deals</p>
-  <p><strong>Version:</strong> 11.0 (Direct Save Fix)</p>
+  <p><strong>Version:</strong> 13.0 (Fresh & Clean)</p>
 </div>
 
 <footer>
@@ -307,7 +313,7 @@
 
       const reader = new FileReader();
       reader.onload = function(event) {
-        selectedProductImg = event.target.result; // Direct Base64 save
+        selectedProductImg = event.target.result;
         previewContainer.innerHTML = `<img src="${selectedProductImg}" class="preview-thumb">`;
       };
       reader.readAsDataURL(file);
@@ -340,13 +346,12 @@
 
         alert("Product Added Successfully!");
         
-        // Reset Form
+        // Reset Form inputs but KEEP admin panel OPEN for adding more products
         document.getElementById("single-p-name").value = "";
         document.getElementById("single-p-price").value = "";
         fileInput.value = "";
         selectedProductImg = "";
         previewContainer.innerHTML = "";
-        document.getElementById("admin-panel").style.display = "none";
         
         loadProducts();
       } catch (err) {
