@@ -9,10 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
 
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
@@ -72,9 +68,9 @@
     .admin-login-box { background: #0b1329; border: 1px solid #1e293b; padding: 20px; border-radius: 12px; margin: 20px auto; max-width: 500px; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.4); position: relative; z-index: 100; }
     .admin-login-box input { width: 100%; padding: 10px 12px; margin: 8px 0; background: #152238; border: 1px solid #334155; color: #fff; border-radius: 8px; font-size: 14px; outline: none; }
     
-    .password-container { position: relative; width: 100%; }
-    .password-container input { padding-right: 45px; }
-    .toggle-pass-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 16px; padding: 4px; z-index: 10; }
+    .password-container { position: relative; width: 100%; margin: 8px 0; }
+    .password-container input { width: 100%; padding: 10px 40px 10px 12px; margin: 0; background: #152238; border: 1px solid #334155; color: #fff; border-radius: 8px; font-size: 14px; outline: none; }
+    .toggle-pass-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 16px; z-index: 10; }
 
     .admin-panel { background: #0b1329; border: 2px solid #00c853; padding: 20px; border-radius: 12px; margin: 20px auto; max-width: 500px; display: none; box-shadow: 0 4px 20px rgba(0,200,83,0.3); position: relative; z-index: 100; }
     .admin-panel h3 { color: #00c853; margin-bottom: 15px; font-size: 18px; text-align: center; }
@@ -93,7 +89,7 @@
     .card img { width: 100%; height: 170px; object-fit: cover; border-radius: 10px; background: #152238; }
     .card h3 { font-size: 16px; margin: 12px 0 6px; color: #ffffff; }
     .card .price { color: #00c853; font-size: 18px; font-weight: bold; margin-bottom: 12px; }
-    .card-actions { display: flex; gap: 8px; flex-direction: column; }
+    .card-actions { display: flex; flex-direction: column; gap: 8px; }
     .buy-btn { background: #00c853; color: #000; text-decoration: none; display: block; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 14px; }
     .delete-btn { background: #ef4444; color: #fff; border: none; padding: 8px; border-radius: 8px; font-weight: bold; font-size: 12px; cursor: pointer; display: none; }
     .admin-mode .delete-btn { display: block; }
@@ -160,10 +156,10 @@
       if (passInput) {
         if (passInput.type === "password") {
           passInput.type = "text";
-          if (togglePassBtn) togglePassBtn.textContent = "🙈";
+          togglePassBtn.textContent = "🙈";
         } else {
           passInput.type = "password";
-          if (togglePassBtn) togglePassBtn.textContent = "👁️";
+          togglePassBtn.textContent = "👁️";
         }
       }
     }
@@ -210,10 +206,11 @@
 </header>
 
 <div id="admin-login-box" class="admin-login-box">
-  <h3 style="color:#00c853; margin-bottom:10px;">Secure Login</h3>
-  <input type="email" id="admin-email" placeholder="Enter Email">
+  <h3 style="color:#00c853; margin-bottom:10px;">Admin Secure Login</h3>
+  <!-- Manual Input Fields (Blank by default) -->
+  <input type="email" id="admin-email" placeholder="Enter Admin Email" value="">
   <div class="password-container">
-    <input type="password" id="admin-pass" placeholder="Enter Password">
+    <input type="password" id="admin-pass" placeholder="Enter Admin Password" value="">
     <button type="button" class="toggle-pass-btn" id="toggle-pass-btn" onclick="togglePasswordVisibility()">👁️</button>
   </div>
   <button class="add-btn" id="login-submit-btn">Login to Dashboard</button>
@@ -224,7 +221,7 @@
   <input type="text" id="p-name" placeholder="Product Name">
   <input type="number" id="p-price" placeholder="Price in ₹">
   
-  <label class="file-input-label">🖼️ Select Product Photo from Gallery:</label>
+  <label class="file-input-label">🖼️ Select Product Photo:</label>
   <input type="file" id="p-file" accept="image/*" style="display:none;">
   <button type="button" class="secondary-btn" id="select-img-btn">📷 Choose Photo from Gallery</button>
   <div class="preview-container" id="preview-container"></div>
@@ -240,25 +237,25 @@
 <div id="track-section" class="page-section">
   <h2>📦 Track Your Order</h2>
   <p>Enter your Tracking ID to check status:</p>
-  <input type="text" id="track-id-input" class="track-input" placeholder="Enter Tracking ID (e.g. TED1001)">
+  <input type="text" id="track-id-input" class="track-input" placeholder="Enter Tracking ID">
   <button class="add-btn" id="track-submit-btn">Track Status</button>
   <div id="track-result" class="track-result"></div>
 </div>
 
 <div id="privacy-section" class="page-section">
   <h2>🛡️ Privacy Policy</h2>
-  <p>At Third Eye Deals, protecting your privacy and secure data management is our highest priority.</p>
+  <p>At Third Eye Deals, protecting your privacy is our highest priority.</p>
 </div>
 
 <div id="terms-section" class="page-section">
   <h2>📄 Terms & Conditions</h2>
-  <p>1. All products, prices, and offers listed are subject to availability and updates without prior notice.</p>
+  <p>All listed products and prices are subject to availability.</p>
 </div>
 
 <div id="about-section" class="page-section">
   <h2>⚙️ Settings & About Site</h2>
   <p><strong>App Name:</strong> Third Eye Deals</p>
-  <p><strong>Version:</strong> 3.9 (Multi-Product Fixed)</p>
+  <p><strong>Version:</strong> 5.4 (Manual Input & Secure Check)</p>
 </div>
 
 <footer>
@@ -271,42 +268,36 @@
 </footer>
 
 <script>
-  const ADMIN_EMAIL = "thirdeyedeals@gmail.com";
   let selectedImageBase64 = "";
 
   document.addEventListener("DOMContentLoaded", () => {
-    const passInput = document.getElementById("admin-pass");
+    loadProducts();
 
     document.getElementById("login-submit-btn").addEventListener("click", () => {
-      const emailInput = document.getElementById("admin-email").value.trim().toLowerCase();
-      const passVal = passInput.value.trim();
+      const email = document.getElementById("admin-email").value.trim();
+      const pass = document.getElementById("admin-pass").value.trim();
 
-      if (!emailInput || !passVal) {
-        alert("Please fill both email and password!");
-        return;
+      // Set to match photo requirements: www.thirdeyedeals@gmail.com and ikbigbang@1
+      if (email === "www.thirdeyedeals@gmail.com" && pass === "ikbigbang@1") {
+        isAdminLoggedIn = true;
+        document.getElementById("admin-email").value = "";
+        document.getElementById("admin-pass").value = "";
+        document.getElementById("admin-login-box").style.display = "none";
+        document.getElementById("admin-panel").style.display = "block";
+        document.getElementById("auth-btn").innerText = "🛠️ Dashboard";
+        loadProducts();
+        alert("Login Successful!");
+      } else {
+        alert("Invalid Email or Password!");
       }
-
-      if (emailInput !== ADMIN_EMAIL) {
-        alert("Access denied! Enter valid Admin Email.");
-        return;
-      }
-
-      document.getElementById("admin-email").value = "";
-      passInput.value = "";
-      document.getElementById("admin-login-box").style.display = "none";
-      document.getElementById("admin-panel").style.display = "block";
-      document.getElementById("auth-btn").innerText = "🛠️ Dashboard";
-      isAdminLoggedIn = true;
-      loadProducts();
-      alert("Login Successful to Dashboard!");
     });
 
     document.getElementById("logout-btn").addEventListener("click", () => {
       isAdminLoggedIn = false;
-      alert("Logged out successfully!");
       document.getElementById("admin-panel").style.display = "none";
       document.getElementById("auth-btn").innerText = "🔑 Login";
       loadProducts();
+      alert("Logged out successfully!");
     });
 
     const fileInput = document.getElementById("p-file");
@@ -320,7 +311,6 @@
       if (!file) return;
       const reader = new FileReader();
       reader.onload = function(event) {
-        // Image compression/resizing can be avoided for simplicity, but we limit file reading
         selectedImageBase64 = event.target.result;
         previewContainer.innerHTML = `<img src="${selectedImageBase64}" class="preview-thumb">`;
         selectImgBtn.innerText = "📷 Photo Selected ✅";
@@ -332,21 +322,20 @@
       const name = document.getElementById("p-name").value.trim();
       const price = document.getElementById("p-price").value.trim();
       
-      if (!name || !price) return alert("Please fill name and price!");
-      if (!selectedImageBase64) return alert("Please select a photo from gallery!");
+      if (!name || !price) return alert("Please fill product name and price!");
+      if (!selectedImageBase64) return alert("Please select a product photo!");
 
-      const productData = {
-        id: "loc_" + Date.now(),
+      const newProduct = {
+        id: "prod_" + Date.now(),
         name: name,
         price: price,
-        img: selectedImageBase64,
-        createdAt: Date.now()
+        img: selectedImageBase64
       };
 
       try {
-        let localProducts = JSON.parse(localStorage.getItem("local_products") || "[]");
-        localProducts.unshift(productData); // Naya product sabse upar add hoga
-        localStorage.setItem("local_products", JSON.stringify(localProducts));
+        let products = JSON.parse(localStorage.getItem("all_products") || "[]");
+        products.unshift(newProduct);
+        localStorage.setItem("all_products", JSON.stringify(products));
 
         alert("Product Added Successfully!");
         document.getElementById("p-name").value = "";
@@ -357,52 +346,62 @@
         document.getElementById("admin-panel").style.display = "none";
         loadProducts();
       } catch (err) {
-        alert("Storage Full! Please use smaller image size or delete old products.");
+        alert("Storage is full or image is too large. Try a smaller image.");
       }
     });
-
-    loadProducts();
 
     document.getElementById("track-submit-btn").addEventListener("click", () => {
       const tid = document.getElementById("track-id-input").value.trim();
       const resBox = document.getElementById("track-result");
       if (!tid) return alert("Please enter a Tracking ID!");
       resBox.style.display = "block";
-      resBox.innerHTML = `<strong>Status for ${tid}:</strong><br>🟢 <b>Shipped & On the Way</b><br>📦 Expected Delivery: 3-5 Business Days`;
+      resBox.innerHTML = `<strong>Status for ${tid}:</strong><br>🟢 <b>Shipped & On the Way</b><br>📦 Expected Delivery: 3-5 Days`;
     });
   });
 
   function deleteProduct(id) {
     if (confirm("Are you sure you want to delete this product?")) {
-      let localProducts = JSON.parse(localStorage.getItem("local_products") || "[]");
-      localProducts = localProducts.filter(p => p.id !== id);
-      localStorage.setItem("local_products", JSON.stringify(localProducts));
+      let products = JSON.parse(localStorage.getItem("all_products") || "[]");
+      products = products.filter(p => p.id !== id);
+      localStorage.setItem("all_products", JSON.stringify(products));
       loadProducts();
     }
   }
 
-  function renderProductsList(productsArray) {
+  function loadProducts() {
     const grid = document.getElementById("product-list");
-    grid.innerHTML = "";
+    let products = JSON.parse(localStorage.getItem("all_products") || "[]");
     
+    grid.innerHTML = "";
     if (isAdminLoggedIn) {
       grid.classList.add("admin-mode");
     } else {
       grid.classList.remove("admin-mode");
     }
 
-    if (!productsArray || productsArray.length === 0) {
-      grid.innerHTML = `<div class="no-product">No products available yet. Admin can login and add products.</div>`;
+    if (products.length === 0) {
+      grid.innerHTML = `<div class="no-product">No products available yet. Login as admin to add products.</div>`;
       return;
     }
-    
-    productsArray.forEach(p => {
-      const safeImg = p.img || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400';
-      const safeName = p.name || 'Product';
-      const safePrice = p.price || '0';
-      const safeId = p.id || '';
 
+    products.forEach(p => {
       grid.innerHTML += `
         <div class="card">
           <div>
-            <img src="${safeImg}" alt="${safeName
+            <img src="${p.img}" alt="${p.name}">
+            <h3>${p.name}</h3>
+            <div class="price">₹${p.price}</div>
+          </div>
+          <div class="card-actions">
+            <a class="buy-btn" href="mailto:thirdeyedeals@gmail.com?subject=Order%20for%20${encodeURIComponent(p.name)}">Buy Now / Inquiry</a>
+            <button class="delete-btn" onclick="deleteProduct('${p.id}')">🗑️ Delete Product</button>
+          </div>
+        </div>
+      `;
+    });
+  }
+</script>
+
+</body>
+  </html>
+  
