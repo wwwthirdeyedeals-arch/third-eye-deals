@@ -9,6 +9,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
 
+  <!-- Firebase App & Firestore Compat CDN -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
@@ -107,11 +111,20 @@
   </style>
 
   <script>
-    // Automatically clear all old products on first load of version 13.0
-    if (!localStorage.getItem("v13_cleared")) {
-      localStorage.removeItem("all_products");
-      localStorage.setItem("v13_cleared", "true");
-    }
+    // --- FIREBASE CONFIGURATION (Added your keys) ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyDc14-V4g44-ly2wMi1Ma3agrYEQbNqZZk",
+      authDomain: "third-eye-deals.firebaseapp.com",
+      projectId: "third-eye-deals",
+      storageBucket: "third-eye-deals.firebasestorage.app",
+      messagingSenderId: "419383554702",
+      appId: "1:419383554702:web:6ed3e321056bdf2b424fdf",
+      measurementId: "G-MH2K6NZKPY"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
     function openMenu() {
       document.getElementById("drawer").classList.add("active");
@@ -286,7 +299,7 @@
 <div id="about-section" class="page-section">
   <h2>⚙️ Settings & About Site</h2>
   <p><strong>App Name:</strong> Third Eye Deals</p>
-  <p><strong>Version:</strong> 13.0 (Fresh & Clean)</p>
+  <p><strong>Version:</strong> 16.0 (Firebase Connected)</p>
 </div>
 
 <footer>
@@ -333,30 +346,26 @@
       }
 
       const newProduct = {
-        id: "prod_" + Date.now(),
         name: name,
         price: price,
-        img: selectedProductImg
+        img: selectedProductImg,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
       };
 
-      try {
-        let products = JSON.parse(localStorage.getItem("all_products") || "[]");
-        products.unshift(newProduct);
-        localStorage.setItem("all_products", JSON.stringify(products));
-
-        alert("Product Added Successfully!");
-        
-        // Reset Form inputs but KEEP admin panel OPEN for adding more products
-        document.getElementById("single-p-name").value = "";
-        document.getElementById("single-p-price").value = "";
-        fileInput.value = "";
-        selectedProductImg = "";
-        previewContainer.innerHTML = "";
-        
-        loadProducts();
-      } catch (err) {
-        alert("Storage is full or image is too large! Try a smaller image.");
-      }
+      // Save to Firebase Cloud Firestore
+      db.collection("products").add(newProduct)
+        .then(() => {
+          alert("Product Added to Cloud Successfully!");
+          document.getElementById("single-p-name").value = "";
+          document.getElementById("single-p-price").value = "";
+          fileInput.value = "";
+          selectedProductImg = "";
+          previewContainer.innerHTML = "";
+          loadProducts();
+        })
+        .catch((err) => {
+          alert("Error adding product: " + err.message);
+        });
     });
 
     document.getElementById("track-submit-btn").addEventListener("click", () => {
@@ -368,48 +377,47 @@
     });
   });
 
-  function deleteProduct(id) {
+  function deleteProduct(docId) {
     if (confirm("Are you sure you want to delete this product?")) {
-      let products = JSON.parse(localStorage.getItem("all_products") || "[]");
-      products = products.filter(p => p.id !== id);
-      localStorage.setItem("all_products", JSON.stringify(products));
-      loadProducts();
+      db.collection("products").doc(docId).delete()
+        .then(() => {
+          alert("Product Deleted from Cloud!");
+          loadProducts();
+        })
+        .catch((err) => {
+          alert("Error deleting: " + err.message);
+        });
     }
   }
 
   function loadProducts() {
     const grid = document.getElementById("product-list");
-    let products = JSON.parse(localStorage.getItem("all_products") || "[]");
     
-    grid.innerHTML = "";
     if (isAdminLoggedIn) {
       grid.classList.add("admin-mode");
     } else {
       grid.classList.remove("admin-mode");
     }
 
-    if (products.length === 0) {
-      grid.innerHTML = `<div class="no-product">No products available yet. Login as admin to add products.</div>`;
-      return;
-    }
+    // Load products from Firebase Cloud Firestore
+    db.collection("products").orderBy("createdAt", "desc").get()
+      .then((querySnapshot) => {
+        grid.innerHTML = "";
+        if (querySnapshot.empty) {
+          grid.innerHTML = `<div class="no-product">No products available yet. Login as admin to add products.</div>`;
+          return;
+        }
 
-    products.forEach(p => {
-      grid.innerHTML += `
-        <div class="card">
-          <div>
-            <img src="${p.img}" alt="${p.name}">
-            <h3>${p.name}</h3>
-            <div class="price">₹${p.price}</div>
-          </div>
-          <div class="card-actions">
-            <a href="mailto:thirdeyedeals@gmail.com?subject=Order%20${encodeURIComponent(p.name)}" class="buy-btn">Buy Now</a>
-            <button class="delete-btn" onclick="deleteProduct('${p.id}')">🗑️ Delete Product</button>
-          </div>
-        </div>
-      `;
-    });
-  }
-</script>
-</body>
-  </html>
-  
+        querySnapshot.forEach((doc) => {
+          const p = doc.data();
+          const docId = doc.id;
+          grid.innerHTML += `
+            <div class="card">
+              <div>
+                <img src="${p.img}" alt="${p.name}">
+                <h3>${p.name}</h3>
+                <div class="price">₹${p.price}</div>
+              </div>
+              <div class="card-actions">
+                <a href="mailto:thirdeyedeals@gmail.com?subject=Order%20${encodeURIComponent(p.name)}" class="buy-btn">Buy Now</a>
+                <button cl
